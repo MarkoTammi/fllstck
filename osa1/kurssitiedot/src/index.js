@@ -1,4 +1,4 @@
-//Marko kurssitiedot 1.2s
+//Marko kurssitiedot 1.3s
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -6,9 +6,7 @@ import ReactDOM from 'react-dom';
 const Part = (props) => {
     return (
         <>
-        <p>{props.part1} {props.exercises1}</p>
-        <p>{props.part2} {props.exercises2}</p>
-        <p>{props.part3} {props.exercises3}</p>
+        <p>{props.part.name} {props.part.exercises} </p>
         </>        
     )
 }
@@ -22,11 +20,12 @@ const Header = (props) => {
 }
 
 const Content = (props) => {
+    //console.log(props)
     return (
         <>
-        <Part part1 ={props.part1} exercises1={props.exercises1} />
-        <Part part2 ={props.part2} exercises2={props.exercises2} />
-        <Part part3 ={props.part3} exercises3={props.exercises3} />
+        <Part part ={props.part1} />
+        <Part part ={props.part2} />
+        <Part part ={props.part3} />
         </>
     )
 }
@@ -40,21 +39,27 @@ const Total = (props) => {
 }
 
 const App = () => {
-    const course = 'Half Stack -sovelluskehitys'
-    const part1 = 'Reactin perusteet'
-    const exercises1 = 10
-    const part2 = 'Tiedonvälitys propseilla'
-    const exercises2 = 7
-    const part3 = 'Komponenttien tila'
-    const exercises3 = 14
+    const course = 'Half Stack -sovelluskehitys osa 1.3'
+    const part1 = {
+        name: 'Reactin perusteet',
+        exercises: 10
+    }
+
+    const part2 = {
+        name: 'Tiedonvälitys propseilla',
+        exercises: 7
+    }
+
+    const part3 = {
+        name: 'Komponenttien tila',
+        exercises: 14
+    }
   
     return (
         <>
         <Header course={course} />
-        <Content part1={part1} exercises1={exercises1}
-            part2={part2} exercises2={exercises2}
-            part3={part3} exercises3={exercises3}/>
-        <Total sum={exercises1 + exercises2 + exercises3}/>
+        <Content part1={part1} part2={part2} part3={part3} />
+        <Total sum={part1.exercises + part2.exercises + part3.exercises} />
         </>
     )
   }
