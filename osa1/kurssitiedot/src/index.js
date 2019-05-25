@@ -1,4 +1,4 @@
-//Marko kurssitiedot 1.4
+//Marko kurssitiedot 1.5
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -41,8 +41,9 @@ const Total = (props) => {
 }
 
 const App = () => {
-    const course = 'Half Stack -sovelluskehitys osa 1.4'
-    const parts = [
+    const course = {
+        name : 'Half Stack -sovelluskehitys osa 1.5',
+        parts : [
         {
           name: 'Reactin perusteet',
           exercises: 10
@@ -56,12 +57,14 @@ const App = () => {
           exercises: 14
         }
       ]
+    }
   
     return (
         <>
-        <Header course={course} />
-        <Content parts={parts} />
-        <Total sum={parts[0].exercises + parts[1].exercises + parts[2].exercises} />
+        <Header course={course.name} />
+        <Content parts={course.parts} />
+        <Total sum={course.parts[0].exercises + course.parts[1].exercises + 
+            course.parts[2].exercises} />
         </>
     )
   }
