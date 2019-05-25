@@ -1,9 +1,11 @@
-//Marko kurssitiedot 1.3s
+//Marko kurssitiedot 1.4
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 
 const Part = (props) => {
+    //console.log(props)
     return (
         <>
         <p>{props.part.name} {props.part.exercises} </p>
@@ -23,9 +25,9 @@ const Content = (props) => {
     //console.log(props)
     return (
         <>
-        <Part part ={props.part1} />
-        <Part part ={props.part2} />
-        <Part part ={props.part3} />
+        <Part part ={props.parts[0]} />
+        <Part part ={props.parts[1]} />
+        <Part part ={props.parts[2]} />
         </>
     )
 }
@@ -39,27 +41,27 @@ const Total = (props) => {
 }
 
 const App = () => {
-    const course = 'Half Stack -sovelluskehitys osa 1.3'
-    const part1 = {
-        name: 'Reactin perusteet',
-        exercises: 10
-    }
-
-    const part2 = {
-        name: 'Tiedonvälitys propseilla',
-        exercises: 7
-    }
-
-    const part3 = {
-        name: 'Komponenttien tila',
-        exercises: 14
-    }
+    const course = 'Half Stack -sovelluskehitys osa 1.4'
+    const parts = [
+        {
+          name: 'Reactin perusteet',
+          exercises: 10
+        },
+        {
+          name: 'Tiedonvälitys propseilla',
+          exercises: 7
+        },
+        {
+          name: 'Komponenttien tila',
+          exercises: 14
+        }
+      ]
   
     return (
         <>
         <Header course={course} />
-        <Content part1={part1} part2={part2} part3={part3} />
-        <Total sum={part1.exercises + part2.exercises + part3.exercises} />
+        <Content parts={parts} />
+        <Total sum={parts[0].exercises + parts[1].exercises + parts[2].exercises} />
         </>
     )
   }
