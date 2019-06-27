@@ -11,7 +11,7 @@ const Button = (props) => {
     // console.log(props)
     const { handleOnClick, text } = props
     return ( 
-    <button onClick={handleOnClick}>{text}</button>
+      <button onClick={handleOnClick}>{text}</button>
     )
 }
 
