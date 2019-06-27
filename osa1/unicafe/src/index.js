@@ -1,4 +1,4 @@
-//MarkoT fllstack 1.10: unicafe step5
+//MarkoT fllstck 1.11*: unicafe step6
 
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
@@ -25,18 +25,26 @@ import ReactDOM from 'react-dom'
 
 // Component to create statistics
 const Statistic2 = (props) => {
-  if (props.allNbr === 0 && props.txt === 'good: ') {
+  if (props.allNbr === 0 && props.txt === 'good') {
     return (
-      <p>No feedback has been given so far. The app is used by pressing the buttons.</p> 
+      <tbody>
+        <tr>
+          <td>No feedback has been given so far. The app is used by pressing the buttons.</td>
+        </tr>
+      </tbody>
     )
   }
   if (props.allNbr === 0) {
     return null
   }
   return (
-    <div>
-      <p>{props.txt} {props.nbr} {props.pros}</p>
-    </div>
+    <tbody>
+      <tr>
+        <td>{props.txt}</td> 
+        <td>{props.nbr}</td>
+        <td>{props.pros}</td>
+      </tr>
+    </tbody>
     )
 }
 
@@ -67,7 +75,7 @@ const App = () => {
 
   return (
     <div>
-        <p>MarkoT fllstack 1.10: unicafe step5</p>
+        <p>MarkoT fllstck 1.11*: unicafe step6</p>
 
         <h2>Unicafe - give feedback</h2>
         <Button handleOnClick={() => increaseGood(good+1)} text='good'/>
@@ -84,13 +92,16 @@ const App = () => {
           averageTxt="average: " averageNbr={(( good - bad ) / totalNumber )}
           positiveTxt="positive: " positiveNbr={(( good / totalNumber ) * 100 )} positivePros=" %"
           /> */}
-        
-        <Statistic2 allNbr={totalNumber} txt="good: " nbr={good}/>
-        <Statistic2 allNbr={totalNumber} txt="neutral: " nbr={neutral}/>
-        <Statistic2 allNbr={totalNumber} txt="bad: " nbr={bad}/>
-        <Statistic2 allNbr={totalNumber} txt="all: " nbr={totalNumber}/>
-        <Statistic2 allNbr={totalNumber} txt="average: " nbr={(( good - bad ) / totalNumber )}/>
-        <Statistic2 allNbr={totalNumber} txt="positive: " nbr={(( good / totalNumber ) * 100 )} pros=" %"/>
+        <table>
+          
+          <Statistic2 allNbr={totalNumber} txt="good" nbr={good}/>
+          <Statistic2 allNbr={totalNumber} txt="neutral" nbr={neutral}/>
+          <Statistic2 allNbr={totalNumber} txt="bad" nbr={bad}/>
+          <Statistic2 allNbr={totalNumber} txt="all" nbr={totalNumber}/>
+          <Statistic2 allNbr={totalNumber} txt="average" nbr={(( good - bad ) / totalNumber )}/>
+          <Statistic2 allNbr={totalNumber} txt="positive" nbr={(( good / totalNumber ) * 100 )} pros=" %"/>
+          
+        </table>
     </div>
   )
 }
