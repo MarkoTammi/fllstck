@@ -1,17 +1,17 @@
-//MarkoT fllstack 1.6: unicafe step1
+//MarkoT fllstack 1.8: unicafe step3
 
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const DisplayStatistis = (props) => (
-    <p>{props.text} {props.nrb}</p>
+const Statistis = (props) => (
+    <p>{props.text} {props.nrb} {props.pros}</p>
 )
 
 const Button = (props) => {
     // console.log(props)
     const { handleOnClick, text } = props
     return ( 
-    <button onClick={handleOnClick}>{text}</button>
+      <button onClick={handleOnClick}>{text}</button>
     )
 }
 
@@ -28,9 +28,12 @@ const App = () => {
     const increaseNeutral = (value) => setNeutral(value)
     const increaseBad = (value) => setBad(value)
 
+    // calculate total number of clicks
+    const totalNumber = (good + neutral + bad)
+
   return (
     <div>
-        <p>MarkoT fllstack 1.6: unicafe step1</p>
+        <p>MarkoT fllstack 1.8: unicafe step3</p>
         <h2>Unicafe - give feedback</h2>
 
         <Button handleOnClick={() => increaseGood(good+1)} text='good'/>
@@ -39,9 +42,13 @@ const App = () => {
 
 
         <h3>statistics</h3>
-        <DisplayStatistis text="good: " nrb={good}/>
-        <DisplayStatistis text="neutral: " nrb={neutral}/>
-        <DisplayStatistis text="bad: " nrb={bad}/>        
+        <Statistis text="good: " nrb={good}/>
+        <Statistis text="neutral: " nrb={neutral}/>
+        <Statistis text="bad: " nrb={bad}/>
+        <Statistis text="all: " nrb={totalNumber}/>
+        <Statistis text="average: " nrb={(( good - bad ) / totalNumber )}/>      
+        <Statistis text="positive: " nrb={(( good / totalNumber ) * 100 )} pros=" %"/>      
+
     </div>
   )
 }
