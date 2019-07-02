@@ -1,4 +1,4 @@
-// Fullstack MarkoT 1.12*: anekdootit step1
+// Fullstack MarkoT 1.13*: anekdootit step2
 
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
@@ -16,9 +16,9 @@ const DisplayAnecdotes = (props) => {
 // Component to create all buttons and eventlistener
 const Button = (props) => {
     //console.log('Button')
-    const { handleOnClick} = props
+    const { handleOnClick, text} = props
     return ( 
-      <button onClick={handleOnClick}>next anecdote</button>
+      <button onClick={handleOnClick}>{text}</button>
     )
 }
 
@@ -36,25 +36,43 @@ const App = (props) => {
         setSelected(randomnumber)
     }  
 
+    //Calculates votes when vote-button is pressed
+    const countVotes = () => {
+        let nbrVotes = votesArray[selected]
+        votesArray[selected] = nbrVotes+1
+        console.log(votesArray)
+        return null
+    }
+
     return (
         <div>
-            <h5>MarkoT fllstck 1.12*: anekdootit step1</h5>
+            <h5>MarkoT fllstck 1.13*: anekdootit step2</h5>
             
             <DisplayAnecdotes anecdotes={anecdotes} number={selected}/>
-            <Button handleOnClick={() => setToValue()}/>
+            <Button handleOnClick={() => countVotes()}text='vote'/>
+            <Button handleOnClick={() => setToValue()} text='next anecdote'/>
 
         </div>
     )
 }
 
 const anecdotes = [
-  'If it hurts, do it more often',
-  'Adding manpower to a late software project makes it later!',
-  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-  'Premature optimization is the root of all evil.',
-  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
+  '0 - If it hurts, do it more often',
+  '1 - Adding manpower to a late software project makes it later!',
+  '2 - The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+  '3 - Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+  '4 - Premature optimization is the root of all evil.',
+  '5 - Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
+
+//create enmpty array for counting votes
+let votesArray = []
+let i = 0
+while (i < anecdotes.length) {
+    votesArray.push(0)
+    i++
+}
+    
 
 ReactDOM.render(
   <App anecdotes={anecdotes} />,
