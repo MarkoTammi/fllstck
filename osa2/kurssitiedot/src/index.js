@@ -1,15 +1,24 @@
-//MarkoT fllstck 2.1: kurssitiedot step6
+// MarkoT fllstck 2.4: kurssitiedot step 9
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+// Calculates total amounts of courses
+const Total = (props) => {
+    //console.log("Total" , props)
+    const totalAmount = props.parts.reduce(function(sum, part) {
+        return sum +  part.exercises
+    }, 0)
+    
+    return (
+        <div>
+            <p>total of {totalAmount} exercises</p>
+        </div>
+    )
+}
 
-
+// Display name of course and number of exercises
 const Content = (props) => {
-/*     console.log(props)
-    const tulos = props.parts.map(part => part.name)
-    console.log(tulos) */
-
     return (
         <div>
         {props.parts.map(part => <p key={part.id}>{part.name} {part.exercises}</p>)}
@@ -17,6 +26,7 @@ const Content = (props) => {
     )       
 }
 
+// Display name of course header
 const Header = (props) => {
     return (
         <div>
@@ -25,42 +35,95 @@ const Header = (props) => {
     )
 }
 
+// Basic structure of one course
 const Course = (props) => {
-
+    //console.log("Course")
+    //console.log(props)
     return (
         <div>
             <Header course={props.course.name}/>
             <Content parts={props.course.parts}/>
+            <Total parts={props.course.parts}/>
         </div>
     )
 }
 
+// Main Component
 const App = () => {
-    const course = {
-        name : 'Half Stack application development',
-        parts : [
+    const courses = [
         {
-            name: 'Fundamentals of React',
-            exercises: 10,
-            id: 1
+          name: 'Half Stack application development',
+          parts: [
+            {
+              name: 'Fundamentals of React',
+              exercises: 10,
+              id: 1
+            },
+            {
+              name: 'Using props to pass data',
+              exercises: 7,
+              id: 2
+            },
+            {
+              name: 'State of a component',
+              exercises: 14,
+              id: 3
+            },
+            {
+              name: 'Redux',
+              exercises: 11,
+              id: 4
+            }
+          ]
         },
+
         {
-            name: 'Using props to pass data',
-            exercises: 7,
-            id: 2
-        },
+            name: 'Half Stack application development-2',
+            parts: [
+              {
+                name: 'Fundamentals of React',
+                exercises: 10,
+                id: 1
+              },
+              {
+                name: 'Using props to pass data',
+                exercises: 7,
+                id: 2
+              },
+              {
+                name: 'Marko',
+                exercises: 1,
+                id: 4
+              }
+            ]
+          },
+
         {
-            name: 'State of a component',
-            exercises: 14,
-            id: 3,
+          name: 'Node.js',
+          parts: [
+            {
+              name: 'Routing',
+              exercises: 3,
+              id: 1
+            },
+            {
+              name: 'Middlewares',
+              exercises: 7,
+              id: 2
+            },
+            {
+              name: 'Marko-testi',
+              exercises: 4,
+              id: 3
+            }
+          ]
         }
       ]
-    }
-
+    //console.log(courses)
     return (
         <div>
-            <h5>MarkoT fllstck 2.1: kurssitiedot step6</h5>
-            <Course course={course} />
+            <h5>MarkoT fllstck 2.4: kurssitiedot step 9</h5>
+            {courses.map((course, i) => <Course key={i} course={course} />)}
         </div>
       )
 
