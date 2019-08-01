@@ -1,52 +1,12 @@
-// MarkoT fllstck 2.4: kurssitiedot step 9
+// MarkoT fllstck 2.5: kurssitiedot step 10/erillinen moduli
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Course from './components/course';
 
-// Calculates total amounts of courses
-const Total = (props) => {
-    //console.log("Total" , props)
-    const totalAmount = props.parts.reduce(function(sum, part) {
-        return sum +  part.exercises
-    }, 0)
-    
-    return (
-        <div>
-            <p>total of {totalAmount} exercises</p>
-        </div>
-    )
-}
 
-// Display name of course and number of exercises
-const Content = (props) => {
-    return (
-        <div>
-        {props.parts.map(part => <p key={part.id}>{part.name} {part.exercises}</p>)}
-        </div>
-    )       
-}
+// Course component moved to own file ./components/course.js
 
-// Display name of course header
-const Header = (props) => {
-    return (
-        <div>
-            <h1>{props.course}</h1>
-        </div>
-    )
-}
-
-// Basic structure of one course
-const Course = (props) => {
-    //console.log("Course")
-    //console.log(props)
-    return (
-        <div>
-            <Header course={props.course.name}/>
-            <Content parts={props.course.parts}/>
-            <Total parts={props.course.parts}/>
-        </div>
-    )
-}
 
 // Main Component
 const App = () => {
@@ -122,7 +82,7 @@ const App = () => {
     //console.log(courses)
     return (
         <div>
-            <h5>MarkoT fllstck 2.4: kurssitiedot step 9</h5>
+            <h5>MarkoT fllstck 2.5: kurssitiedot step 10/erillinen moduli</h5>
             {courses.map((course, i) => <Course key={i} course={course} />)}
         </div>
       )
