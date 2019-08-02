@@ -1,4 +1,4 @@
-// MarkoT fllstack 2.6: puhelinluettelo step1
+// MarkoT fllstack 2.7: puhelinluettelo step2
 
 import React, { useState } from 'react';
 
@@ -10,18 +10,27 @@ const App = () => {
         ]) 
     const [ newName, setNewName ] = useState('')
 
-    const addPerson = (event) => {    
+    // Event handler when 'add' button is clicked. Check if input name is already in a phonebook.
+    // If yes -> alert popup otherwise -> name is added to the phonebook. Finally input field is
+    // cleared.
+    const addPersonPhonebook = (event) => {    
         event.preventDefault()    
-        console.log('button clicked',event.target)
         
         const personObject = {
           name: newName,
         }
-        setPersons(persons.concat(personObject))
+
+        if ( (persons.map(person => person.name).includes(newName)) === false ) {
+          setPersons(persons.concat(personObject))
+        } else {
+          window.alert(`${newName} is already added to phonebook`)
+        }
+
         setNewName('')
     }
 
-    const handlePersonAdding = (event) => {
+    // Event handler for inputing name.
+    const handlePersonInput = (event) => {
         console.log(event.target.value)    
         setNewName(event.target.value)  
     }
@@ -31,11 +40,11 @@ const App = () => {
 
 return (
     <div>
-        <h5>MarkoT fllstack 2.6: puhelinluettelo step1</h5>
+        <h5>MarkoT fllstack 2.7: puhelinluettelo step2</h5>
         <h2>Phonebook</h2>
-        <form onSubmit={addPerson}>
+        <form onSubmit={addPersonPhonebook}>
             <div>
-                name: <input value={newName} onChange={handlePersonAdding}/>
+                name: <input value={newName} onChange={handlePersonInput}/>
             </div>
             <div>
                 <button type="submit">add</button>
