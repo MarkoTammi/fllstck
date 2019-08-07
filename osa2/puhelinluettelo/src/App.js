@@ -1,4 +1,4 @@
-// MarkoT 2.11: puhelinluettelo step6
+// MarkoT 2.15: puhelinluettelo step7
 
 
 import React, { useState, useEffect } from 'react';
@@ -67,9 +67,15 @@ const App = () => {
         }
 
         if ( (persons.map(person => person.name).includes(newName)) === false ) {
-          setPersons(persons.concat(personObject))
+            // Name don't exist -> save name and number to local db.json
+            axios
+                .post('http://localhost:3001/persons', personObject)
+                .then(response => {
+                    setPersons(persons.concat(response.data))
+                })
         } else {
-          window.alert(`${newName} is already added to phonebook`)
+            // Name already exist in phonebook
+            window.alert(`${newName} is already added to phonebook`)
         }
 
         setNewName('')
@@ -96,7 +102,7 @@ const App = () => {
 
     return (
         <div>
-            <h5>MarkoT fllstck 2.11: puhelinluettelo step6</h5>
+            <h5>MarkoT 2.15: puhelinluettelo step7</h5>
             <h2>Phonebook</h2>
 
             <Filter
