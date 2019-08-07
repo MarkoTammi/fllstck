@@ -1,5 +1,5 @@
 
-// MarkoT fllstack 2.6: puhelinluettelo step1
+// MarkoT fllstack 2 : puhelinluettelo
 
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
