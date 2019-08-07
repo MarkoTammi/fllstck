@@ -1,7 +1,9 @@
-// MarkoT fllstack 2.10: puhelinluettelo step5
+// MarkoT 2.11: puhelinluettelo step6
 
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 
 // Component to filter names to be displayed based on typed string
 const Filter = (props) => {
@@ -39,14 +41,19 @@ const DislayNames = (props) => {
 
 // Main component App
 const App = () => {
-    const [ persons, setPersons] = useState([
-        { name: 'Arto Hellas', number : '040123456' },
-        { name: 'Marko Tammi', number : '040380056' }
-        ]) 
+    const [ persons, setPersons] = useState([]) 
     const [ newName, setNewName ] = useState('')
     const [ newNumber, setNewNumber ] = useState('')
     const [ filterString, setfilterString ] = useState('')
 
+    // To get name and number data for phonebook from local db.json file
+    useEffect(() => {
+        axios
+          .get('http://localhost:3001/persons')
+          .then(response => {
+                setPersons(response.data)
+          })
+      }, [])
 
     // Event handler when 'add' button is clicked. Check if input name is already in a phonebook.
     // If yes -> alert popup otherwise -> person name and number is added to the phonebook. 
@@ -89,7 +96,7 @@ const App = () => {
 
     return (
         <div>
-            <h5>MarkoT fllstck 2.10: puhelinluettelo step5</h5>
+            <h5>MarkoT fllstck 2.11: puhelinluettelo step6</h5>
             <h2>Phonebook</h2>
 
             <Filter
