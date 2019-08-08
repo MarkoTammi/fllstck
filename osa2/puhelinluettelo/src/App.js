@@ -1,8 +1,8 @@
-// MarkoT 2.16: puhelinluettelo step8
+// MarkoT 2.17: puhelinluettelo step9
 
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
 import personServices from './services/persons'
 
 
@@ -15,13 +15,14 @@ const App = () => {
 
     // To get name and number data for phonebook from local db.json file
     useEffect(() => {
-/*         axios
-          .get('http://localhost:3001/persons') */
         personServices
             .getAllPersons()
             .then(response => {
-                setPersons(response.data)
-          })
+                //console.log('getAllPerson: ', response)
+                //console.log(response.data[4].name)
+                //setPersons(response.data)
+                setPersons(response.data.filter(n => n.name !== undefined))
+            })
       }, [])
 
     // Event handler when 'add' button is clicked. Check if input name is already in a phonebook.
@@ -66,10 +67,20 @@ const App = () => {
         setfilterString(event.target.value)
     }
 
+    // Event handler for deleting name
+    const handleDeletePersonName = (props) => {
+        console.log('delete clicked: id = ', props)
+        personServices
+            .deletePerson(props)
+            .then(() => personServices.getAllPersons())
+            .then(response => {
+                setPersons(response.data.filter(n => n.name !== undefined))
+            } )        
+    }
 
     return (
         <div>
-            <h5>MarkoT 2.16: puhelinluettelo step8</h5>
+            <h5>MarkoT 2.17: puhelinluettelo step9</h5>
             <h2>Phonebook</h2>
 
             <Filter
@@ -114,7 +125,7 @@ const AddNewName = (props) => {
             <form onSubmit={props.addPersonPhonebook}>
                 <div> name: <input value={props.newName} onChange={props.handlePersonNameInput}/> </div>
                 <div> number: <input value={props.newNumber} onChange={props.handlePersonNumberInput}/> </div>
-                <div> <button type="submit">add</button> </div>
+                <div> <button type="submit">Add</button> </div>
             </form>
         </>
     )
@@ -124,14 +135,47 @@ const AddNewName = (props) => {
 const DislayNames = (props) => {
     // Display all names because filter is empty
     if (props.filterString === ''){
-        return props.persons.map(person => <p key={person.name}>{person.name} {person.number}</p> )
+        return (
+            <NameTable namesToDisplay={props.persons} />
+        )     
     } else {
-        // Display names icluding filter string
+        // Display only names including filter string
         const filteredPersons = props.persons.filter(person => person.name.toLowerCase().includes(props.filterString.toLowerCase()))
-        return filteredPersons.map(person => <p key={person.name}>{person.name} {person.number}</p> )
+        return (
+            <NameTable namesToDisplay={filteredPersons} />
+        )
     }
 }
 
+// Component to display phonebook table
+const NameTable = (props) => {
+
+/*     // Event handler for deleting name
+    const handleDeletePersonName = (props) => {
+        console.log('delete clicked: id = ', props)
+        personServices
+            .deletePerson(props)
+            .then(() => personServices.getAllPersons())
+            .then(response => {
+                setPersons(response.data.filter(n => n.name !== undefined))
+            } )        
+    } */
+
+    //console.log(props.namesToDisplay)
+    return (
+        <table>
+                <tbody>
+                    {props.namesToDisplay.map(person =>
+                        <tr key={person.id}>
+                            <td>{person.name}</td>
+                            <td>{person.number}</td> 
+                            <td><button type="button" onClick={ () => handleDeletePersonName(person.id)}>Delete</button></td>
+                            <td>{person.id}</td> 
+                        </tr>)}
+                </tbody>
+            </table>
+    )
+}
 
 
 export default App
