@@ -16,27 +16,32 @@ const App = () => {
 
 
     // To get name and number data for phonebook from local db.json file
-    useEffect(() => {
+    const hookToGetNameDb = () => {
         personServices
             .getAllPersons()
             .then(response => {
                 //console.log('getAllPerson: ', response)
-                //console.log(response.data[4].name)
+                //console.log('getAllData response.data[4].name', response.data[4].name)
                 //setPersons(response.data)
+                //console.log('hookToGetNameDb -  getAllPersons response.data', response.data)
                 setPersons(response.data.filter(n => n.name !== undefined))
+                //console.log('hookToGetNameDb - after setPersons - persons', persons)
             })
-      }, [])
+      }
+    useEffect(hookToGetNameDb,[])
+
 
     // Event handler when 'add' button is clicked. Check if input name is already in a phonebook.
     // If yes -> alert popup otherwise -> person name and number is added to the phonebook. 
     // Finally input fields are cleared.
-    const addPersonPhonebook = (event) => {    
+    const addPersonPhonebook = (event) => {
         event.preventDefault()    
         const personObject = {
           name: newName,
           number: newNumber,
         }
-        if ( (persons.map(person => person.name).includes(newName)) === false ) {
+
+        if ((persons.map(person => person.name).includes(newName)) === false ) {
             // Name don't exist -> save name and number to local db.json
             personServices
                 .createPerson(personObject)
@@ -44,8 +49,30 @@ const App = () => {
                     setPersons(persons.concat(response.data))
                 })
         } else {
-            // Name already exist in phonebook
-            window.alert(`${newName} is already added to phonebook`)
+            // Name already exist in phonebook -> update number
+            if (window.confirm(`${newName} is already in a phonebook. Do you want to update the number? After "yes" reload browser for update. Update is under work.`)) {
+                //console.log('true - personObject: ', personObject)
+                const personToUpdate = persons.filter(person => person.name === personObject.name )
+                //console.log('personToUpdate - id : ', personToUpdate[0].id )
+                const personUpdateObject = {
+                    name: personToUpdate[0].name,
+                    number: newNumber,
+                    id: personToUpdate[0].id,
+                }
+                console.log('personUpdateObject : ', personUpdateObject)
+                //personToUpdate.concat(personObject)
+                //console.log('personToUpdate : ', personToUpdate)
+                personServices
+                    .updatePerson(personUpdateObject, personToUpdate[0].id)
+                    //.then(response => console.log('update : ', response))
+
+                    console.log('persons after db update : ', persons)
+                    //.then(() => {
+                        //setPersons(persons.filter(person => person.id !== props.id))
+                      //  setPersons(persons.filter(n => n.name !== undefined))
+
+                    //})
+            }
         }
         setNewName('')
         setNewNumber('')
@@ -68,6 +95,18 @@ const App = () => {
     const handleFilterStringInput = (event) => {
         setFilterString(event.target.value)
     }
+
+    // Event handler for deleting name from the phonebook
+    const handleDeletePersonName = (props) => {
+        console.log('delete clicked - props: ', props)
+        if (window.confirm(`Delete ${props.name} ?`)) {
+            personServices
+                .deletePerson(props.id)
+                .then(() => {
+                    setPersons(persons.filter(person => person.id !== props.id))
+                })
+        }
+    }    
 
     return (
         <div>
@@ -93,6 +132,7 @@ const App = () => {
                 persons={persons}
                 setPersons={setPersons}
                 personServices={personServices}
+                handleDeletePersonName={handleDeletePersonName}
                 />
 
             <Footer />
@@ -114,7 +154,7 @@ const App = () => {
 const Filter = (props) => {
     return (
         <form>
-            <div>filter existing names by <input value={props.filterString} onChange={props.handleFilterStringInput}/> </div>
+            <div>Filter existing names by <input value={props.filterString} onChange={props.handleFilterStringInput}/> </div>
         </form>
     )
 }
@@ -124,8 +164,8 @@ const AddNewName = (props) => {
     return (
         <>
             <form onSubmit={props.addPersonPhonebook}>
-                <div> name: <input value={props.newName} onChange={props.handlePersonNameInput}/> </div>
-                <div> number: <input value={props.newNumber} onChange={props.handlePersonNumberInput}/> </div>
+                <div> Name: <input value={props.newName} onChange={props.handlePersonNameInput}/> </div>
+                <div> Number: <input value={props.newNumber} onChange={props.handlePersonNumberInput}/> </div>
                 <div> <button type="submit">Add</button> </div>
             </form>
         </>
@@ -139,8 +179,7 @@ const DislayNames = (props) => {
         return (
             <NameTable 
                 namesToDisplay={props.persons}
-                setPersons={props.setPersons}
-                personServices={props.personServices}
+                handleDeletePersonName={props.handleDeletePersonName}
                 />
         )     
     } else {
@@ -149,8 +188,7 @@ const DislayNames = (props) => {
         return (
             <NameTable 
                 namesToDisplay={filteredPersons}
-                setPersons={props.setPersons}
-                personServices={props.personServices}
+                handleDeletePersonName={props.handleDeletePersonName}
                 />
         )
     }
@@ -160,27 +198,6 @@ const DislayNames = (props) => {
 const NameTable = (props) => {
     //console.log('NameTable props : ', props)
 
-
-    // Event handler for deleting name
-    const handleDeletePersonName = (props) => {
-        console.log('delete clicked: id = ', props)
-        personServices
-            .deletePerson(props)
-            //.getAllPersons()
-            .then(() => getAllPersons())
-            .then(response => {
-                console.log('getAllPerson after delete: ', response)})            
-            .then(response => {
-                    props.setPersons(response.data.filter(n => n.name !== undefined))})
-
-                //console.log('getAllPerson: ', response)
-                //console.log('after filter: ', response.data.filter(n => n.name !== undefined))
-                //console.log(response.data[4].name)
-                //props.setPersons(response.data)
-                //setPersons(response.data.filter(n => n.name !== undefined))
-    }    
-
-
     return (
         <table>
                 <tbody>
@@ -188,7 +205,7 @@ const NameTable = (props) => {
                         <tr key={person.id}>
                             <td>{person.name}</td>
                             <td>{person.number}</td> 
-                            <td><button type="button" onClick={ () => handleDeletePersonName(person.id)}>Delete</button></td>
+                            <td><button type="button" onClick={ () => props.handleDeletePersonName(person)}>Delete</button></td>
                             <td>{person.id}</td> 
                         </tr>)}
                 </tbody>
