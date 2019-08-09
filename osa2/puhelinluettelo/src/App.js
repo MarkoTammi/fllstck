@@ -12,7 +12,7 @@ const App = () => {
     const [ newName, setNewName ] = useState('')
     const [ newNumber, setNewNumber ] = useState('')
     const [ filterString, setFilterString ] = useState('')
-    const [ message, setMessage ] = useState('')
+    const [ errorMessage, setErrorMessage ] = useState('')
 
 
     // To get name and number data for phonebook from local db.json file
@@ -50,7 +50,7 @@ const App = () => {
                 })
         } else {
             // Name already exist in phonebook -> update number
-            if (window.confirm(`${newName} is already in a phonebook. Do you want to update the number? After "yes" reload browser for update. Update is under work.`)) {
+            if (window.confirm(`${newName} is already in a phonebook. Do you want to update the number?`)) {
                 //console.log('true - personObject: ', personObject)
                 const personToUpdate = persons.filter(person => person.name === personObject.name )
                 //console.log('personToUpdate - id : ', personToUpdate[0].id )
@@ -72,6 +72,9 @@ const App = () => {
                       //  setPersons(persons.filter(n => n.name !== undefined))
 
                     //})
+                setErrorMessage('After "yes" reload browser for update. Update is under work.')
+                setTimeout(() => {
+                    setErrorMessage('')}, 5000)
             }
         }
         setNewName('')
@@ -112,6 +115,8 @@ const App = () => {
         <div>
             <h2>Phonebook</h2>
 
+            <Notification message={errorMessage} />
+
             <Filter
                 filterString={filterString} 
                 handleFilterStringInput={handleFilterStringInput}
@@ -144,11 +149,15 @@ const App = () => {
 //
 
 // Component to display notification 5sec.
-/* const Notification = (props) => {
+const Notification = (props) => {
+    if (props.message === '') {
+        return null
+    }
+
     return (
-        setTimeout(() => {setMessage(null)}, 5000)
+        <div className='error'>{props.message}</div>        
     )
-} */
+}
 
 // Component to filter names to be displayed based on typed string
 const Filter = (props) => {
@@ -215,8 +224,14 @@ const NameTable = (props) => {
 
 // Component to display the footer
 const Footer = () => {
+    const footerStyle = {
+        color: 'green',
+        fontStyle: 'italic',
+        fontSize: '0.8em'
+      }
+
     return (
-        <h6>MarkoT 2.17: puhelinluettelo step9</h6>
+        <h6 style={footerStyle}>MarkoT 2.17: puhelinluettelo step9</h6>
     )
 }
 
