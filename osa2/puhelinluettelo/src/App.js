@@ -2,8 +2,8 @@
 
 
 import React, { useState, useEffect } from 'react';
-//import axios from 'axios';
 import personServices from './services/persons'
+import './index.css'
 
 
 // Main component App
@@ -11,7 +11,9 @@ const App = () => {
     const [ persons, setPersons] = useState([]) 
     const [ newName, setNewName ] = useState('')
     const [ newNumber, setNewNumber ] = useState('')
-    const [ filterString, setfilterString ] = useState('')
+    const [ filterString, setFilterString ] = useState('')
+    const [ message, setMessage ] = useState('')
+
 
     // To get name and number data for phonebook from local db.json file
     useEffect(() => {
@@ -64,23 +66,11 @@ const App = () => {
 
      // Event handler for inputing filter string  
     const handleFilterStringInput = (event) => {
-        setfilterString(event.target.value)
-    }
-
-    // Event handler for deleting name
-    const handleDeletePersonName = (props) => {
-        console.log('delete clicked: id = ', props)
-        personServices
-            .deletePerson(props)
-            .then(() => personServices.getAllPersons())
-            .then(response => {
-                setPersons(response.data.filter(n => n.name !== undefined))
-            } )        
+        setFilterString(event.target.value)
     }
 
     return (
         <div>
-            <h5>MarkoT 2.17: puhelinluettelo step9</h5>
             <h2>Phonebook</h2>
 
             <Filter
@@ -101,13 +91,24 @@ const App = () => {
             <DislayNames 
                 filterString={filterString}
                 persons={persons}
+                setPersons={setPersons}
+                personServices={personServices}
                 />
+
+            <Footer />
         </div>
     )
 } 
 //
 // end - of - App
 //
+
+// Component to display notification 5sec.
+/* const Notification = (props) => {
+    return (
+        setTimeout(() => {setMessage(null)}, 5000)
+    )
+} */
 
 // Component to filter names to be displayed based on typed string
 const Filter = (props) => {
@@ -136,32 +137,50 @@ const DislayNames = (props) => {
     // Display all names because filter is empty
     if (props.filterString === ''){
         return (
-            <NameTable namesToDisplay={props.persons} />
+            <NameTable 
+                namesToDisplay={props.persons}
+                setPersons={props.setPersons}
+                personServices={props.personServices}
+                />
         )     
     } else {
         // Display only names including filter string
         const filteredPersons = props.persons.filter(person => person.name.toLowerCase().includes(props.filterString.toLowerCase()))
         return (
-            <NameTable namesToDisplay={filteredPersons} />
+            <NameTable 
+                namesToDisplay={filteredPersons}
+                setPersons={props.setPersons}
+                personServices={props.personServices}
+                />
         )
     }
 }
 
 // Component to display phonebook table
 const NameTable = (props) => {
+    //console.log('NameTable props : ', props)
 
-/*     // Event handler for deleting name
+
+    // Event handler for deleting name
     const handleDeletePersonName = (props) => {
         console.log('delete clicked: id = ', props)
         personServices
             .deletePerson(props)
-            .then(() => personServices.getAllPersons())
+            //.getAllPersons()
+            .then(() => getAllPersons())
             .then(response => {
-                setPersons(response.data.filter(n => n.name !== undefined))
-            } )        
-    } */
+                console.log('getAllPerson after delete: ', response)})            
+            .then(response => {
+                    props.setPersons(response.data.filter(n => n.name !== undefined))})
 
-    //console.log(props.namesToDisplay)
+                //console.log('getAllPerson: ', response)
+                //console.log('after filter: ', response.data.filter(n => n.name !== undefined))
+                //console.log(response.data[4].name)
+                //props.setPersons(response.data)
+                //setPersons(response.data.filter(n => n.name !== undefined))
+    }    
+
+
     return (
         <table>
                 <tbody>
@@ -177,5 +196,11 @@ const NameTable = (props) => {
     )
 }
 
+// Component to display the footer
+const Footer = () => {
+    return (
+        <h6>MarkoT 2.17: puhelinluettelo step9</h6>
+    )
+}
 
 export default App
