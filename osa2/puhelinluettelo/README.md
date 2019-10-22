@@ -3,7 +3,13 @@
 
 Projektihakemistossa
 
-npm start // react
-npm run server //json server
+npm start // react  
+npm run server //json server  
 
-localhost:3000
+localhost:3000  
+
+
+## Asennuksia
+
+
+npm install cors --save

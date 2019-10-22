@@ -231,7 +231,7 @@ const Footer = () => {
       }
 
     return (
-        <h6 style={footerStyle}>MarkoT 2.17: puhelinluettelo step9</h6>
+        <h6 style={footerStyle}>Marko 2.17: puhelinluettelo step9</h6>
     )
 }
 
